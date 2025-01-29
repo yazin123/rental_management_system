@@ -1,0 +1,127 @@
+<!-- templates/core/bills/create.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Create New Bill</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tenant</label>
+                            {{ form.tenant }}
+                            {% if form.tenant.errors %}
+                                <div class="text-danger">
+                                    {{ form.tenant.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Bill Date</label>
+                                    {{ form.bill_date }}
+                                    {% if form.bill_date.errors %}
+                                        <div class="text-danger">
+                                            {{ form.bill_date.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Due Date</label>
+                                    {{ form.due_date }}
+                                    {% if form.due_date.errors %}
+                                        <div class="text-danger">
+                                            {{ form.due_date.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Rent Amount</label>
+                                    {{ form.rent_amount }}
+                                    {% if form.rent_amount.errors %}
+                                        <div class="text-danger">
+                                            {{ form.rent_amount.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Electricity Amount</label>
+                                    {{ form.electricity_amount }}
+                                    {% if form.electricity_amount.errors %}
+                                        <div class="text-danger">
+                                            {{ form.electricity_amount.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Water Amount</label>
+                                    {{ form.water_amount }}
+                                    {% if form.water_amount.errors %}
+                                        <div class="text-danger">
+                                            {{ form.water_amount.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Other Charges</label>
+                                    {{ form.other_charges }}
+                                    {% if form.other_charges.errors %}
+                                        <div class="text-danger">
+                                            {{ form.other_charges.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Create Bill</button>
+                            <a href="{% url 'bill_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add this script at the end -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-fill rent amount when tenant is selected
+        const tenantSelect = document.querySelector('select[name="tenant"]');
+        const rentInput = document.querySelector('input[name="rent_amount"]');
+        
+        tenantSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.dataset.rentAmount) {
+                rentInput.value = selectedOption.dataset.rentAmount;
+            }
+        });
+    });
+</script>
+{% endblock %}

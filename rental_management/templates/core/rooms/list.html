@@ -1,0 +1,59 @@
+<!-- templates/core/rooms/list.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Room Management</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Room Management</h2>
+        <a href="{% url 'create_room' %}" class="btn btn-primary">Add New Room</a>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Room Number</th>
+                            <th>Floor</th>
+                            <th>Rent Amount</th>
+                            <th>Status</th>
+                            <th>Current Tenant</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for room in rooms %}
+                            <tr>
+                                <td>{{ room.number }}</td>
+                                <td>{{ room.floor }}</td>
+                                <td>${{ room.rent_amount }}</td>
+                                <td>
+                                    <span class="badge {% if room.is_occupied %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {{ room.is_occupied|yesno:"Occupied,Vacant" }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% for tenant in room.tenant_set.all %}
+                                        {{ tenant.user.get_full_name }}
+                                    {% empty %}
+                                        No tenant
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'assign_room' room.id %}" class="btn btn-primary btn-sm">
+                                        {% if room.is_occupied %}Reassign{% else %}Assign{% endif %}
+                                    </a>
+                                    <a href="{% url 'edit_room' room.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'delete_room' room.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                                
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

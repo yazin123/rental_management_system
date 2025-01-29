@@ -1,0 +1,39 @@
+<!-- templates/core/rooms/delete.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Delete Room</h2>
+                </div>
+                <div class="card-body">
+                    <p class="alert alert-danger">
+                        Are you sure you want to delete Room {{ room.number }}?
+                        This action cannot be undone.
+                    </p>
+
+                    {% if room.is_occupied %}
+                        <div class="alert alert-warning">
+                            This room is currently occupied. Please remove the tenant before deleting.
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger" 
+                                    {% if room.is_occupied %}disabled{% endif %}>
+                                Delete Room
+                            </button>
+                            <a href="{% url 'room_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

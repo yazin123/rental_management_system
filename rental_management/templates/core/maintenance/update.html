@@ -1,0 +1,58 @@
+<!-- templates/core/maintenance/update.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Update Maintenance Request</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Current Request Details:</h5>
+                        <p>
+                            <strong>Room:</strong> {{ maintenance.room.number }}<br>
+                            <strong>Issue Type:</strong> {{ maintenance.issue_type }}<br>
+                            <strong>Current Status:</strong> {{ maintenance.get_status_display }}
+                        </p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Update Status</label>
+                            <select name="status" class="form-select">
+                                <option value="PENDING" {% if maintenance.status == 'PENDING' %}selected{% endif %}>
+                                    Pending
+                                </option>
+                                <option value="IN_PROGRESS" {% if maintenance.status == 'IN_PROGRESS' %}selected{% endif %}>
+                                    In Progress
+                                </option>
+                                <option value="COMPLETED" {% if maintenance.status == 'COMPLETED' %}selected{% endif %}>
+                                    Completed
+                                </option>
+                                <option value="CANCELLED" {% if maintenance.status == 'CANCELLED' %}selected{% endif %}>
+                                    Cancelled
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Resolution Notes</label>
+                            <textarea name="resolution_notes" class="form-control" rows="4">{{ maintenance.resolution_notes }}</textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Update Request</button>
+                            <a href="{% url 'maintenance_detail' maintenance.id %}" 
+                               class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

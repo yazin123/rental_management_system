@@ -1,0 +1,113 @@
+<!-- templates/core/maintenance/detail.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Maintenance Request Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Room Number:</div>
+                        <div class="col-md-8">{{ maintenance.room.number }}</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Issue Type:</div>
+                        <div class="col-md-8">{{ maintenance.issue_type }}</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Priority:</div>
+                        <div class="col-md-8">
+                            <span class="badge {% if maintenance.priority == 'HIGH' %}bg-danger
+                                           {% elif maintenance.priority == 'MEDIUM' %}bg-warning
+                                           {% else %}bg-info{% endif %}">
+                                {{ maintenance.get_priority_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Status:</div>
+                        <div class="col-md-8">
+                            <span class="badge {% if maintenance.status == 'PENDING' %}bg-warning
+                                           {% elif maintenance.status == 'IN_PROGRESS' %}bg-primary
+                                           {% elif maintenance.status == 'COMPLETED' %}bg-success
+                                           {% else %}bg-secondary{% endif %}">
+                                {{ maintenance.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Reported Date:</div>
+                        <div class="col-md-8">{{ maintenance.reported_date|date:"M d, Y h:i A" }}</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Description:</div>
+                        <div class="col-md-8">{{ maintenance.description }}</div>
+                    </div>
+
+                    {% if maintenance.assigned_to %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Assigned To:</div>
+                        <div class="col-md-8">{{ maintenance.assigned_to.get_full_name }}</div>
+                    </div>
+                    {% endif %}
+
+                    {% if maintenance.resolved_date %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Resolved Date:</div>
+                        <div class="col-md-8">{{ maintenance.resolved_date|date:"M d, Y h:i A" }}</div>
+                    </div>
+                    {% endif %}
+
+                    {% if maintenance.resolution_notes %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Resolution Notes:</div>
+                        <div class="col-md-8">{{ maintenance.resolution_notes }}</div>
+                    </div>
+                    {% endif %}
+                    {% if user.user_type == 'ADMIN' and not maintenance.assigned_to %}
+                    <div class="mt-3">
+                        <a href="{% url 'assign_maintenance' maintenance.id %}" class="btn btn-primary">
+                            Assign Staff
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if maintenance.assigned_to == user %}
+                    <div class="mt-3">
+                        <a href="{% url 'staff_update_maintenance' maintenance.id %}" class="btn btn-primary">
+                            Update Status
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if maintenance.assigned_to %}
+                    <div class="mt-3">
+                        <strong>Assigned To:</strong> {{ maintenance.assigned_to.get_full_name }}
+                    </div>
+                    {% endif %}
+
+                    {% if user.user_type != 'TENANT' and maintenance.status != 'COMPLETED' %}
+                    <div class="mt-4">
+                        <a href="{% url 'update_maintenance' maintenance.id %}" class="btn btn-primary">Update
+                            Status</a>
+                    </div>
+                    {% endif %}
+
+                    <div class="mt-3">
+                        <a href="{% url 'maintenance_list' %}" class="btn btn-secondary">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

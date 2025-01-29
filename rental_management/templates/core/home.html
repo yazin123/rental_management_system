@@ -1,0 +1,47 @@
+<!-- templates/core/home.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <div class="col-md-8">
+            <h1 class="display-4 mb-4">Welcome to Rental Management System</h1>
+            <p class="lead mb-4">Efficiently manage your apartment rentals, bills, and maintenance requests.</p>
+            
+            {% if not user.is_authenticated %}
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg mx-2">Register</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg mx-2">Login</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Tenant Portal</h3>
+                    <p class="card-text">Access your bills, submit maintenance requests, and manage your tenancy.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Easy Payments</h3>
+                    <p class="card-text">View and pay your rent and utility bills online with ease.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Maintenance Support</h3>
+                    <p class="card-text">Submit and track maintenance requests 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+<!-- templates/core/maintenance/staff_update.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Update Maintenance Request</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Request Details:</h5>
+                        <p>
+                            <strong>Room:</strong> {{ maintenance.room.number }}<br>
+                            <strong>Issue Type:</strong> {{ maintenance.issue_type }}<br>
+                            <strong>Description:</strong> {{ maintenance.description }}<br>
+                            <strong>Priority:</strong> {{ maintenance.get_priority_display }}<br>
+                            <strong>Reported Date:</strong> {{ maintenance.reported_date|date:"M d, Y H:i" }}
+                        </p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                                <div class="text-danger">
+                                    {{ form.status.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Resolution Notes</label>
+                            {{ form.resolution_notes }}
+                            {% if form.resolution_notes.errors %}
+                                <div class="text-danger">
+                                    {{ form.resolution_notes.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Update Request</button>
+                            <a href="{% url 'maintenance_detail' maintenance.id %}" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

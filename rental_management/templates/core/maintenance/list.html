@@ -1,0 +1,64 @@
+<!-- templates/core/maintenance/list.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Maintenance Requests</h2>
+        {% if user.user_type == 'TENANT' %}
+            <a href="{% url 'create_maintenance' %}" class="btn btn-primary">New Request</a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if maintenance_requests %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Room</th>
+                                <th>Issue Type</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in maintenance_requests %}
+                                <tr>
+                                    <td>{{ request.reported_date|date:"M d, Y" }}</td>
+                                    <td>{{ request.room.number }}</td>
+                                    <td>{{ request.issue_type }}</td>
+                                    <td>
+                                        <span class="badge {% if request.priority == 'HIGH' %}bg-danger
+                                                         {% elif request.priority == 'MEDIUM' %}bg-warning
+                                                         {% else %}bg-info{% endif %}">
+                                            {{ request.get_priority_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if request.status == 'PENDING' %}bg-warning
+                                                         {% elif request.status == 'IN_PROGRESS' %}bg-primary
+                                                         {% elif request.status == 'COMPLETED' %}bg-success
+                                                         {% else %}bg-secondary{% endif %}">
+                                            {{ request.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'maintenance_detail' request.id %}" 
+                                           class="btn btn-sm btn-primary">View</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">No maintenance requests found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

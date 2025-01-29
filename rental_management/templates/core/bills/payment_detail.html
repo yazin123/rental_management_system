@@ -1,0 +1,52 @@
+<!-- templates/core/bills/payment_detail.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Payment Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Payment Date:</div>
+                        <div class="col-md-8">{{ payment.payment_date|date:"M d, Y h:i A" }}</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Amount:</div>
+                        <div class="col-md-8">${{ payment.amount }}</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Payment Method:</div>
+                        <div class="col-md-8">{{ payment.get_payment_method_display }}</div>
+                    </div>
+
+                    {% if payment.transaction_id %}
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Transaction ID:</div>
+                            <div class="col-md-8">{{ payment.transaction_id }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if payment.notes %}
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Notes:</div>
+                            <div class="col-md-8">{{ payment.notes }}</div>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'bill_detail' payment.bill.id %}" class="btn btn-primary">
+                            Back to Bill
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

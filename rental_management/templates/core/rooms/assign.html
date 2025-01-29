@@ -1,0 +1,51 @@
+<!-- templates/core/rooms/assign.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Assign Room {{ room.number }}</h2>
+                </div>
+                <div class="card-body">
+                    {% if current_tenant %}
+                        <div class="alert alert-info">
+                            Currently assigned to: {{ current_tenant.user.get_full_name }}
+                        </div>
+                    {% endif %}
+
+                    {% if available_tenants %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">Select Tenant</label>
+                                <select name="tenant" class="form-control">
+                                    {% for tenant in available_tenants %}
+                                        <option value="{{ tenant.id }}">
+                                            {{ tenant.user.get_full_name }} ({{ tenant.user.email }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Assign Room</button>
+                                <a href="{% url 'room_list' %}" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            No tenants available for room assignment.
+                        </div>
+                        <div class="d-grid">
+                            <a href="{% url 'room_list' %}" class="btn btn-secondary">Back to Room List</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
