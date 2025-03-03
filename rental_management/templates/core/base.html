@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'report_list' %}">Reports</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Add Tenant/Staff</a>
+                    </li>
                     {% endif %}
                     {% if user.is_authenticated and user.user_type == 'ADMIN' %}
                     <li class="nav-item">
